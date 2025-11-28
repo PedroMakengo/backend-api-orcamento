@@ -7,7 +7,7 @@ const list = new ListOrcamentoByUserController().handle;
 
 const orcamentoRoutes = Router();
 
-orcamentoRoutes.get("/:userId", list);
+orcamentoRoutes.get("/:usuarioId", list);
 orcamentoRoutes.post("/", create);
 
 export { orcamentoRoutes };

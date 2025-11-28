@@ -8,7 +8,7 @@ const list = new ListProductByUserController().handle;
 
 const productsRoutes = Router();
 
-productsRoutes.get("/:userId", list);
+productsRoutes.get("/:usuarioId", list);
 productsRoutes.post("/", create);
 
 export { productsRoutes };

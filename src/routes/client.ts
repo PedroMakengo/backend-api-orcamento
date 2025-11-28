@@ -7,7 +7,7 @@ const list = new ListClientByUserController().handle;
 
 const clientesRoutes = Router();
 
-clientesRoutes.get("/:userId", list);
+clientesRoutes.get("/:usuarioId", list);
 clientesRoutes.post("/", create);
 
 export { clientesRoutes };

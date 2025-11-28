@@ -8,6 +8,8 @@ class ListOrcamentoByUserService {
       },
       include: {
         itens: true,
+        cliente: true,
+        usuario: true,
       },
     });
 
