@@ -1,65 +1,126 @@
 import { prisma } from "../../lib/prisma";
+
 import type { OrcamentoRequest } from "../../models/interfaces/orcamento/OrcamentoRequest";
+import { enviarOrcamentoEmail } from "../../shared/enviarOrcamentoEmail";
+import { gerarPdfOrcamento } from "../../shared/pdfOrcamento";
 
 class CreateOrcamentoService {
   async execute({
     usuarioId,
     clienteId,
     estado,
-    total,
     observacoes,
     dataValidade,
     itens,
   }: OrcamentoRequest) {
     const user = await prisma.usuario.findFirst({
-      where: {
-        id: usuarioId,
-      },
+      where: { id: usuarioId },
     });
 
     if (!user) {
-      throw new Error("Wrong username or password");
+      throw new Error("Usuário não encontrado");
     }
 
-    // ✅ Converte a string para Date
     const dataValidadeFormatada = new Date(dataValidade);
 
-    // Cria o orçamento e seus itens em uma transação
-    const result = await prisma.$transaction(async (tx: any) => {
-      // Cria o orçamento
+    // ========================================================
+    // 1️⃣ REPROCESSA TODAS AS LINHAS NO BACKEND (SEGURANÇA)
+    // ========================================================
+    const itensCalculados = itens.map((linha) => {
+      const valorSemIVA = linha.quantidade * linha.precoUnit;
+      const valorIVA = valorSemIVA * 0.14; // IVA de 14%
+      const valorComIVA = valorSemIVA + valorIVA;
+
+      const valorDesconto = valorComIVA * (linha.desconto / 100);
+      const totalLinha = valorComIVA - valorDesconto;
+
+      return {
+        produtoId: linha.produtoId,
+        quantidade: linha.quantidade,
+        precoUnit: linha.precoUnit,
+        desconto: linha.desconto,
+        totalLinha,
+      };
+    });
+
+    // Soma total do documento
+    const totalDocumento = itensCalculados.reduce(
+      (acc, item) => acc + item.totalLinha,
+      0
+    );
+
+    // ========================================================
+    // 2️⃣ TRANSAÇÃO: CRIA ORÇAMENTO + LINHAS
+    // ========================================================
+    const result = await prisma.$transaction(async (tx) => {
+      // Criar orçamento já com o total REAL calculado
       const orcamento = await tx.orcamento.create({
         data: {
           usuarioId,
           clienteId,
           estado,
-          total,
+          total: totalDocumento,
           observacoes,
           dataValidade: dataValidadeFormatada,
         },
-      });
-
-      // Cria os itens do orçamento
-      await tx.orcamentoItem.createMany({
-        data: itens.map(({ orcamentoId, ...item }) => ({
-          orcamentoId: orcamento.id,
-          ...item,
-        })),
-      });
-
-      // Busca os itens criados para retornar
-      const itemsCriados = await tx.orcamentoItem.findMany({
-        where: {
-          orcamentoId: orcamento.id,
+        include: {
+          cliente: true,
         },
       });
 
-      return {
-        orcamento,
-        items: itemsCriados,
-      };
+      // Inserir as linhas já recalculadas
+      await tx.orcamentoItem.createMany({
+        data: itensCalculados.map((item) => ({
+          ...item,
+          orcamentoId: orcamento.id,
+        })),
+      });
+
+      return orcamento;
     });
 
-    return result;
+    // ========================================================
+    // 3️⃣ Busca os itens já criados
+    // ========================================================
+    const itensCriados = await prisma.orcamentoItem.findMany({
+      where: { orcamentoId: result.id },
+      include: { produto: true },
+    });
+
+    // ========================================================
+    // 4️⃣ Geração do PDF
+    // ========================================================
+    const pdfPath = await gerarPdfOrcamento(
+      result,
+      result.cliente,
+      itensCriados
+    );
+
+    // ========================================================
+    // 5️⃣ Envio do e-mail
+    // ========================================================
+    await enviarOrcamentoEmail({
+      to: result.cliente.email,
+      subject: `Seu orçamento Nº ${result.id}`,
+      html: `
+        <div style="font-family: Arial; color: #333;">
+          <h2>Seu Orçamento Está Pronto</h2>
+          <p>Olá ${result.cliente.nome},</p>
+          <p>Segue em anexo o orçamento solicitado.</p>
+          <p>Caso tenha dúvidas, estamos disponíveis.</p>
+        </div>
+      `,
+      pdfPath,
+    });
+
+    // ========================================================
+    // 6️⃣ Retorno final
+    // ========================================================
+    return {
+      message: "Orçamento criado e enviado com sucesso",
+      orcamento: result,
+      itens: itensCriados,
+    };
   }
 }
 

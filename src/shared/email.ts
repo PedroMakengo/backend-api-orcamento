@@ -83,6 +83,21 @@ export async function sendVerificationEmail(
     </div>
   `;
       break;
+    case "SEND-NOTIFICATION-ORCAMENTO":
+      subject = "Redefinição de senha";
+      html = `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #FF9800;">Solicitação de Senha</h2>
+            <p style="margin-bottom: 20px;">Você solicitou a redefinição de senha para a sua conta.</p>
+            
+            <p style="margin-bottom: 30px;">Clique no link abaixo para **criar uma nova senha**:</p>
+            
+            <p style="margin-top: 40px; font-size: 12px; color: #888;">
+              Este link expirará em breve. Se você não solicitou esta alteração, ignore este e-mail.
+            </p>
+          </div>
+        `;
+      break;
   }
 
   await transporter.sendMail({
