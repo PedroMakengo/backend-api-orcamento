@@ -1,10 +1,21 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "commonjs", // ✅ Mudado de ESNext para commonjs
     "moduleResolution": "node",
     "target": "ES2023",
+    "outDir": "./dist", // ✅ ADICIONE ISSO - Define onde os arquivos serão gerados
+    "rootDir": "./src", // ✅ ADICIONE ISSO - Define a pasta raiz dos arquivos fonte
     "strict": true,
     "esModuleInterop": true,
+    "skipLibCheck": true, // ✅ Recomendado
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": [
+    "src/**/*"
+  ], // ✅ ADICIONE ISSO - Arquivos a serem compilados
+  "exclude": [
+    "node_modules",
+    "dist"
+  ] // ✅ ADICIONE ISSO - Arquivos a ignorar
 }
