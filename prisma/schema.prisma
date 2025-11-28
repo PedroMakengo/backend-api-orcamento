@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Perfil {
+  ADMIN
+  FUNCIONARIO
+}
+
+model Usuario {
+  id          String       @id @default(uuid())
+  nome        String
+  email       String       @unique
+  senha       String
+  perfil      Perfil
+  activo      Boolean      @default(true)
+  criadoEm    DateTime     @default(now())
+  verifyToken String
+
+  // Relacionamentos
+  clientes    Cliente[]
+  produtos    Produto[]
+  orcamentos  Orcamento[]
+}
+
+model Cliente {
+  id         String       @id @default(uuid())
+  usuarioId  String
+  nome       String
+  email      String?
+  telefone   String?
+  endereco   String?
+  criadoEm   DateTime     @default(now())
+
+  usuario    Usuario      @relation(fields: [usuarioId], references: [id])
+  orcamentos Orcamento[]
+}
+
+model Produto {
+  id          String          @id @default(uuid())
+  usuarioId   String
+  nome        String
+  descricao   String?
+  precoPadrao Float
+  unidade     String?
+  criadoEm    DateTime        @default(now())
+
+  usuario     Usuario         @relation(fields: [usuarioId], references: [id])
+  itens       OrcamentoItem[]
+}
+
+model Orcamento {
+  id           String           @id @default(uuid())
+  usuarioId    String
+  clienteId    String
+  dataValidade DateTime?
+  estado       Estado           @default(PENDENTE)
+  total        Float            @default(0)
+  observacoes  String?
+  criadoEm     DateTime         @default(now())
+
+  usuario      Usuario          @relation(fields: [usuarioId], references: [id])
+  cliente      Cliente          @relation(fields: [clienteId], references: [id])
+  itens        OrcamentoItem[]
+}
+
+enum Estado {
+  PENDENTE
+  ENVIADO
+  ACEITO
+  RECUSADO
+}
+
+model OrcamentoItem {
+  id           String     @id @default(uuid())
+  orcamentoId  String
+  produtoId    String
+  quantidade   Float
+  precoUnit    Float
+  desconto     Float     @default(0)
+  totalLinha   Float
+
+  orcamento    Orcamento @relation(fields: [orcamentoId], references: [id])
+  produto      Produto   @relation(fields: [produtoId], references: [id])
+}

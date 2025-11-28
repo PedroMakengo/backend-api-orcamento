@@ -1,0 +1,874 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Backend CRM ORÇAMENTO",
+    "description": "API CRM ORCAMENTO",
+    "version": "1.0.0"
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/autenticacao": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "description": "Autenticação de utilizador",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token de autenticação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/api/autenticacao/recuperar-senha": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "description": "Recuperar senha do utilizador",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Recuperação de senha do utilizador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/autenticacao/reset-senha": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "description": "Resetar senha do utilizador",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Senha resetada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/autenticacao/verificacao": {
+      "get": {
+        "tags": [
+          "Autenticação"
+        ],
+        "description": "Verify Profile user",
+        "security": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseVerifyToken"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseVerifyToken"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usuario": {
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Listar todos os utilizadores",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Lista de utilizadores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UtilizadorRequest"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Criar novo utilizador",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUtilizadorRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utilizador criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UtilizadorRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/produto": {
+      "post": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Criar novo produto",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Produto criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/produto/{usuarioId}": {
+      "get": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Obter produtos com base em usuarioId (query: usuarioId)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "description": "ID do utilizador para filtrar produtos",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos do utilizador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/cliente": {
+      "post": {
+        "tags": [
+          "Cliente"
+        ],
+        "description": "Criar novo cliente",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/cliente/{usuarioId}": {
+      "get": {
+        "tags": [
+          "Cliente"
+        ],
+        "description": "Listar clientes por usuarioId (path: usuarioId)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "description": "ID do utilizador para filtrar clientes",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de clientes do utilizador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/orcamento": {
+      "post": {
+        "tags": [
+          "Orçamento"
+        ],
+        "description": "Criar novo orçamento",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrcamentoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Orçamento criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrcamentoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/orcamento/{usuarioId}": {
+      "get": {
+        "tags": [
+          "Orçamento"
+        ],
+        "description": "Listar orçamentos por usuarioId (path: usuarioId)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "description": "ID do utilizador para filtrar orçamentos",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de orçamentos do utilizador",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrcamentoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UtilizadorRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateUtilizadorRequest": {
+        "type": "object",
+        "required": [
+          "nome",
+          "email",
+          "senha",
+          "perfil"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "João Silva"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "joao.silva@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "$2b$10$hashGeradoAqui"
+          },
+          "perfil": {
+            "type": "string",
+            "example": "ADMIN"
+          }
+        }
+      },
+      "AuthRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "senha"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "joao.silva@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "$2b$10$hashGeradoAqui"
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "joao.silva@email.com"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "required": [
+          "token",
+          "password"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "password": {
+            "type": "string",
+            "example": "newPassword123"
+          }
+        }
+      },
+      "ResponseVerifyToken": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateProductRequest": {
+        "type": "object",
+        "required": [
+          "nome",
+          "precoPadrao",
+          "unidade",
+          "usuarioId"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Produto Exemplo"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Descrição do produto"
+          },
+          "precoPadrao": {
+            "type": "number",
+            "format": "double",
+            "example": 199.99
+          },
+          "unidade": {
+            "type": "string",
+            "example": "un"
+          },
+          "usuarioId": {
+            "type": "string",
+            "example": "a1b2c3d4-1234-5678-9abc-def012345678"
+          }
+        }
+      },
+      "ProductResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "example": "Produto Exemplo"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Descrição do produto"
+          },
+          "precoPadrao": {
+            "type": "number",
+            "format": "double",
+            "example": 199.99
+          },
+          "unidade": {
+            "type": "string",
+            "example": "un"
+          },
+          "usuarioId": {
+            "type": "string",
+            "example": "a1b2c3d4-1234-5678-9abc-def012345678"
+          }
+        }
+      },
+      "CreateClientRequest": {
+        "type": "object",
+        "required": [
+          "nome",
+          "email",
+          "telefone",
+          "usuarioId"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Cliente Exemplo"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "cliente@exemplo.com"
+          },
+          "telefone": {
+            "type": "string",
+            "example": "+258 84 000 0000"
+          },
+          "endereco": {
+            "type": "string",
+            "example": "Rua Exemplo, 123, Cidade"
+          },
+          "usuarioId": {
+            "type": "string",
+            "example": "a1b2c3d4-1234-5678-9abc-def012345678"
+          }
+        }
+      },
+      "ClientResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "example": "Cliente Exemplo"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "cliente@exemplo.com"
+          },
+          "telefone": {
+            "type": "string",
+            "example": "+258 84 000 0000"
+          },
+          "endereco": {
+            "type": "string",
+            "example": "Rua Exemplo, 123, Cidade"
+          },
+          "usuarioId": {
+            "type": "string",
+            "example": "a1b2c3d4-1234-5678-9abc-def012345678"
+          }
+        }
+      },
+      "CreateOrcamentoRequest": {
+        "type": "object",
+        "required": [
+          "usuarioId",
+          "clienteId",
+          "dataValidade",
+          "total",
+          "itens"
+        ],
+        "properties": {
+          "usuarioId": {
+            "type": "string",
+            "example": "a1b2c3d4-1234-5678-9abc-def012345678"
+          },
+          "clienteId": {
+            "type": "string",
+            "example": "c1d2e3f4-1234-5678-9abc-def012345678"
+          },
+          "dataValidade": {
+            "type": "string",
+            "format": "date",
+            "example": "2025-12-31"
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "PENDENTE",
+              "ENVIADO",
+              "ACEITO"
+            ],
+            "example": "PENDENTE"
+          },
+          "total": {
+            "type": "number",
+            "format": "double",
+            "example": 1500.00
+          },
+          "observacoes": {
+            "type": "string",
+            "example": "Observações do orçamento"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrcamentoItemRequest"
+            }
+          }
+        }
+      },
+      "OrcamentoItemRequest": {
+        "type": "object",
+        "required": [
+          "produtoId",
+          "quantidade",
+          "precoUnit",
+          "desconto",
+          "totalLinha"
+        ],
+        "properties": {
+          "produtoId": {
+            "type": "string",
+            "example": "p1q2r3s4-1234-5678-9abc-def012345678"
+          },
+          "quantidade": {
+            "type": "integer",
+            "example": 2
+          },
+          "precoUnit": {
+            "type": "number",
+            "format": "double",
+            "example": 199.99
+          },
+          "desconto": {
+            "type": "number",
+            "format": "double",
+            "example": 0
+          },
+          "totalLinha": {
+            "type": "number",
+            "format": "double",
+            "example": 399.98
+          }
+        }
+      },
+      "OrcamentoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "usuarioId": {
+            "type": "string",
+            "example": "a1b2c3d4-1234-5678-9abc-def012345678"
+          },
+          "clienteId": {
+            "type": "string",
+            "example": "c1d2e3f4-1234-5678-9abc-def012345678"
+          },
+          "dataValidade": {
+            "type": "string",
+            "format": "date",
+            "example": "2025-12-31"
+          },
+          "estado": {
+            "type": "string",
+            "example": "PENDENTE"
+          },
+          "total": {
+            "type": "number",
+            "format": "double",
+            "example": 1500.00
+          },
+          "observacoes": {
+            "type": "string",
+            "example": "Observações do orçamento"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrcamentoItemResponse"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-11-28T12:34:56Z"
+          }
+        }
+      },
+      "OrcamentoItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "orcamentoId": {
+            "type": "string",
+            "example": "o1o2o3o4-1234-5678-9abc-def012345678"
+          },
+          "produtoId": {
+            "type": "string",
+            "example": "p1q2r3s4-1234-5678-9abc-def012345678"
+          },
+          "quantidade": {
+            "type": "integer",
+            "example": 2
+          },
+          "precoUnit": {
+            "type": "number",
+            "format": "double",
+            "example": 199.99
+          },
+          "desconto": {
+            "type": "number",
+            "format": "double",
+            "example": 0
+          },
+          "totalLinha": {
+            "type": "number",
+            "format": "double",
+            "example": 399.98
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "description": "Autenticação utilizando Json Web Token",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
