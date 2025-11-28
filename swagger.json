@@ -488,6 +488,66 @@
             "description": "Não autorizado"
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "Cliente"
+        ],
+        "description": "Atualizar cliente por ID (Patch parcial)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do cliente a atualizar",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClientRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cliente atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Cliente não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/cliente/{usuarioId}": {
@@ -532,6 +592,52 @@
           },
           "401": {
             "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/cliente/{id}": {
+      "delete": {
+        "tags": [
+          "Cliente"
+        ],
+        "description": "Excluir cliente por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do cliente a excluir",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cliente excluído com sucesso"
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Cliente não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -618,6 +724,52 @@
           },
           "401": {
             "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/orcamento/{id}": {
+      "delete": {
+        "tags": [
+          "Orçamento"
+        ],
+        "description": "Excluir orçamento por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do orçamento a excluir",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Orçamento excluído com sucesso"
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Orçamento não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1065,6 +1217,24 @@
           "message": {
             "type": "string",
             "example": "Recurso não encontrado"
+          }
+        }
+      },
+      "DeleteProductResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Produto excluído com sucesso"
+          }
+        }
+      },
+      "DeleteOrcamentoResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Orçamento excluído com sucesso"
           }
         }
       }
