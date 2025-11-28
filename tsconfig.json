@@ -1,24 +1,17 @@
 {
   "compilerOptions": {
-    // ... outras opções
+    "target": "esnext",
+    "module": "commonjs",
+    "rootDir": "./src",
     "outDir": "./dist",
-    "rootDir": "./src", // ou onde seus arquivos .ts estão
-    "baseUrl": "./",
-    "paths": {
-      "@prisma/client": [
-        "./generated/prisma/client"
-      ] // Se você estiver usando aliases
-    },
-    "esModuleInterop": true,
+    "types": [
+      "node"
+    ],
+    "sourceMap": true,
+    "declaration": true,
+    "strict": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "generated/**/*.ts", // Adicione esta linha
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
 }
