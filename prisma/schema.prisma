@@ -35,7 +35,7 @@ model Cliente {
   empresa    String
   email      String?
   telefone   String?
-  zap        String?
+  numeroZap  String?
   endereco   String?
   observacao String
   criadoEm   DateTime     @default(now())

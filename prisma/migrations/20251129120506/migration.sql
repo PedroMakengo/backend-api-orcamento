@@ -18,7 +18,7 @@ CREATE TABLE "Cliente" (
     "empresa" TEXT NOT NULL,
     "email" TEXT,
     "telefone" TEXT,
-    "zap" TEXT,
+    "numeroZap" TEXT,
     "endereco" TEXT,
     "observacao" TEXT NOT NULL,
     "criadoEm" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
