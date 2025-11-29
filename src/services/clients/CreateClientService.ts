@@ -31,6 +31,9 @@ class CreateClientService {
         email,
         endereco,
         telefone,
+        numeroZap: zap,
+        empresa,
+        observacao,
         usuarioId,
       },
     });
