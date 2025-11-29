@@ -11,6 +11,16 @@ class CreateUserService {
 
     const token = uuid();
 
+    // Tenta enviar o email ANTES de criar o usuário
+    try {
+      await sendVerificationEmail(email, token, "REGISTER");
+    } catch (error) {
+      throw new Error(
+        "Falha ao enviar email de verificação. Usuário não foi criado."
+      );
+    }
+
+    // Se o email foi enviado com sucesso, cria o usuário
     const user = await prisma.usuario.create({
       data: {
         nome,
@@ -21,8 +31,6 @@ class CreateUserService {
         verifyToken: token,
       },
     });
-
-    await sendVerificationEmail(email, token, "REGISTER");
 
     return user;
   }
