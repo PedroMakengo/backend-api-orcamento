@@ -3,7 +3,7 @@ export interface ClientRequest {
   empresa: string;
   email: string;
   telefone: string;
-  telefoneWhatsapp: string;
+  zap: string;
   endereco: string;
   observacao: string;
   usuarioId: string;
