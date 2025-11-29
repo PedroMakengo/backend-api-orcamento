@@ -29,7 +29,7 @@ class CreateClientService {
         email,
         endereco,
         telefone,
-        empresa,
+        empresa: empresa,
         numeroZap: zap,
         observacao,
         usuarioId,
