@@ -31,7 +31,6 @@ class CreateClientService {
         email,
         endereco,
         telefone,
-        observacao,
         usuarioId,
       },
     });
