@@ -16,7 +16,8 @@ export async function sendVerificationEmail(
     },
   });
 
-  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+  const frontendUrl =
+    process.env.FRONTEND_URL || "https://crm-orcamento.vercel.app/";
   let subject = "";
   let html = "";
 

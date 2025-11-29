@@ -11,13 +11,24 @@ class AuthUserService {
     });
 
     if (!user) {
-      throw new Error("Wrong username or password");
+      throw new Error("E-mail ou palavra-passe incorreta");
     }
 
     const passwordMatch = await compare(senha, user?.senha);
 
     if (!passwordMatch) {
-      throw new Error("Wrong password");
+      throw new Error("Senha incorreta");
+    }
+
+    const verificarEmailAtivo = await prisma.usuario.findFirst({
+      where: {
+        email,
+        activo: true,
+      },
+    });
+
+    if (!verificarEmailAtivo) {
+      throw new Error("Conta de utilizador não ativo");
     }
 
     const token = sign(

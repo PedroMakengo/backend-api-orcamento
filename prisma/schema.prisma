@@ -18,7 +18,7 @@ model Usuario {
   email       String       @unique
   senha       String
   perfil      Perfil
-  activo      Boolean      @default(true)
+  activo      Boolean      @default(false)
   criadoEm    DateTime     @default(now())
   verifyToken String
 
