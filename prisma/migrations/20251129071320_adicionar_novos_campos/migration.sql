@@ -15,9 +15,12 @@ CREATE TABLE "Cliente" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "usuarioId" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
+    "empresa" TEXT NOT NULL,
     "email" TEXT,
     "telefone" TEXT,
+    "zap" TEXT,
     "endereco" TEXT,
+    "observacao" TEXT NOT NULL,
     "criadoEm" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "Cliente_usuarioId_fkey" FOREIGN KEY ("usuarioId") REFERENCES "Usuario" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

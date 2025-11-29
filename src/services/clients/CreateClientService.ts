@@ -3,7 +3,16 @@ import { prisma } from "../../lib/prisma";
 import type { ClientRequest } from "../../models/interfaces/client/ClientRequest";
 
 class CreateClientService {
-  async execute({ nome, email, endereco, telefone, usuarioId }: ClientRequest) {
+  async execute({
+    nome,
+    email,
+    endereco,
+    telefone,
+    telefoneWhatsapp,
+    empresa,
+    observacao,
+    usuarioId,
+  }: ClientRequest) {
     const user = await prisma.usuario.findFirst({
       where: {
         id: usuarioId,
@@ -20,6 +29,9 @@ class CreateClientService {
         email,
         endereco,
         telefone,
+        zap: telefoneWhatsapp,
+        empresa,
+        observacao,
         usuarioId,
       },
     });

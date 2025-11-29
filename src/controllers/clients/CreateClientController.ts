@@ -4,8 +4,16 @@ import { CreateClientService } from "../../services/clients/CreateClientService"
 
 class CreateClientController {
   async handle(request: Request, response: Response) {
-    const { nome, email, endereco, telefone, usuarioId }: ClientRequest =
-      request.body;
+    const {
+      nome,
+      email,
+      endereco,
+      telefone,
+      telefoneWhatsapp,
+      empresa,
+      observacao,
+      usuarioId,
+    }: ClientRequest = request.body;
 
     const createClientService = new CreateClientService();
 
@@ -14,6 +22,9 @@ class CreateClientController {
       email,
       endereco,
       telefone,
+      telefoneWhatsapp,
+      empresa,
+      observacao,
       usuarioId,
     });
 

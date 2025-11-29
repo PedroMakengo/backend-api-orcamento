@@ -32,10 +32,14 @@ model Cliente {
   id         String       @id @default(uuid())
   usuarioId  String
   nome       String
+  empresa    String
   email      String?
   telefone   String?
+  zap        String?
   endereco   String?
+  observacao String
   criadoEm   DateTime     @default(now())
+
 
   usuario    Usuario      @relation(fields: [usuarioId], references: [id])
   orcamentos Orcamento[]
