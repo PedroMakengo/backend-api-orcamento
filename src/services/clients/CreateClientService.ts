@@ -23,13 +23,15 @@ class CreateClientService {
       throw new Error("Wrong username or password");
     }
 
+    const empresaCliente = empresa;
+
     const save = await prisma.cliente.create({
       data: {
         nome,
         email,
         endereco,
         telefone,
-        empresa: empresa,
+        empresa: empresaCliente,
         numeroZap: zap,
         observacao,
         usuarioId,
