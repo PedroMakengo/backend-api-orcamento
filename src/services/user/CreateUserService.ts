@@ -13,7 +13,7 @@ class CreateUserService {
 
     // Tenta enviar o email ANTES de criar o usuário
     try {
-      await sendVerificationEmail(email, token, "REGISTER");
+      sendVerificationEmail(email, token, "REGISTER");
     } catch (error) {
       throw new Error(
         "Falha ao enviar email de verificação. Usuário não foi criado."
