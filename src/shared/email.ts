@@ -1,4 +1,5 @@
-import nodemailer from "nodemailer";
+// import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 export async function sendVerificationEmail(
   email: string,
@@ -6,15 +7,18 @@ export async function sendVerificationEmail(
   type?: string,
   products?: any
 ) {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  // const resend = new Resend(process.env);
+  const resend = new Resend("re_h3kP9ags_PzkHMTxUK1iucLR38FDGEWBL");
+
+  // const transporter = nodemailer.createTransport({
+  //   host: "smtp.gmail.com",
+  //   port: 587,
+  //   secure: false,
+  //   auth: {
+  //     user: process.env.EMAIL_USER,
+  //     pass: process.env.EMAIL_PASS,
+  //   },
+  // });
 
   const frontendUrl =
     process.env.FRONTEND_URL || "https://crm-orcamento.vercel.app/";
@@ -101,10 +105,24 @@ export async function sendVerificationEmail(
       break;
   }
 
-  await transporter.sendMail({
-    from: '"CRM - ORÇAMENTO" <no-reply@seudominio.com>',
+  // await transporter.sendMail({
+  //   from: '"CRM - ORÇAMENTO" <no-reply@seudominio.com>',
+  //   to: email,
+  //   subject,
+  //   html,
+  // });
+
+  // await resend.emails.send({
+  //   from: "onboarding@resend.dev",
+  //   to: email,
+  //   subject,
+  //   html,
+  // });
+
+  await resend.emails.send({
+    from: '"CRM - ORÇAMENTO" <onboarding@resend.dev>',
     to: email,
-    subject,
-    html,
+    subject: subject,
+    html: html,
   });
 }

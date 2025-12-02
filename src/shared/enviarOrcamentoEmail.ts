@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend("re_h3kP9ags_PzkHMTxUK1iucLR38FDGEWBL");
 
 interface EnviarOrcamentoEmailProps {
   to: any;
@@ -23,8 +26,22 @@ export async function enviarOrcamentoEmail({
     },
   });
 
-  return transporter.sendMail({
-    from: `"${process.env.APP_NAME}" <${process.env.SMTP_USER}>`,
+  // return transporter.sendMail({
+  //   from: `"${process.env.APP_NAME}" <${process.env.SMTP_USER}>`,
+  //   to,
+  //   subject,
+  //   html,
+  //   attachments: [
+  //     {
+  //       filename: "orcamento.pdf",
+  //       path: pdfPath,
+  //       contentType: "application/pdf",
+  //     },
+  //   ],
+  // });
+
+  return resend.emails.send({
+    from: '"CRM - ORÇAMENTO" <onboarding@resend.dev>',
     to,
     subject,
     html,

@@ -12,6 +12,16 @@ class CreateUserService {
     const token = uuid();
 
     // Se o email foi enviado com sucesso, cria o usuário
+    const userExists = await prisma.usuario.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (userExists) {
+      throw new Error("Já existe uma conta criada com este e-mail");
+    }
+
     const user = await prisma.usuario.create({
       data: {
         nome,
