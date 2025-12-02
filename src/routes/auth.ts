@@ -12,8 +12,8 @@ const verifyController = new VerifyUserTokenController().handle;
 const authRoutes = Router();
 
 authRoutes.post("/", authController);
-authRoutes.post("/forgot-password", forgotController);
-authRoutes.post("/reset-password", resetController);
-authRoutes.get("/verify", verifyController);
+authRoutes.post("/recuperar-senha", forgotController);
+authRoutes.post("/reset-senha", resetController);
+authRoutes.put("/verificacao", verifyController);
 
 export { authRoutes };

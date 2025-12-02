@@ -115,7 +115,7 @@
       }
     },
     "/api/autenticacao/verificacao": {
-      "get": {
+      "put": {
         "tags": [
           "Autenticação"
         ],
@@ -133,6 +133,15 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVerifyRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -1235,6 +1244,16 @@
           "message": {
             "type": "string",
             "example": "Orçamento excluído com sucesso"
+          }
+        }
+      },
+      "UpdateVerifyRequest": {
+        "type": "object",
+        "description": "Campo obrigatório",
+        "properties": {
+          "otp": {
+            "type": "string",
+            "example": "12345"
           }
         }
       }
