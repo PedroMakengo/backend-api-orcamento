@@ -4,10 +4,11 @@ import { VerifyUserTokenService } from "../../../services/user/auth/VerifyUserTo
 class VerifyUserTokenController {
   async handle(request: Request, response: Response) {
     const { token } = request?.query as any;
+    const { otp } = request.body;
 
     const verifyUserTokenService = new VerifyUserTokenService();
 
-    const result = await verifyUserTokenService.execute(token);
+    const result = await verifyUserTokenService.execute(token, otp);
 
     return response.json(result);
   }

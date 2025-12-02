@@ -1,7 +1,7 @@
 import { prisma } from "../../../lib/prisma";
 
 class VerifyUserTokenService {
-  async execute(token: string) {
+  async execute(token: string, otp: string) {
     if (!token) {
       throw new Error("Token missing");
     }
@@ -15,8 +15,8 @@ class VerifyUserTokenService {
     }
 
     await prisma.usuario.update({
-      where: { id: user.id },
-      data: { verifyToken: "null", activo: true },
+      where: { id: user.id, codigoOTP: otp },
+      data: { verifyToken: "null", activo: true, codigoOTP: "null" },
     });
 
     return "Token verified successfully";

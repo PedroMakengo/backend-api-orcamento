@@ -21,6 +21,7 @@ model Usuario {
   activo      Boolean      @default(false)
   criadoEm    DateTime     @default(now())
   verifyToken String
+  codigoOTP   String
 
   // Relacionamentos
   clientes    Cliente[]
