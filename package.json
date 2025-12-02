@@ -28,6 +28,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@flydotio/litestream": "^1.0.1",
     "@prisma/client": "^6.16.3",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -37,5 +38,8 @@
     "nodemailer": "^7.0.9",
     "pdfkit": "^0.17.2",
     "uuid": "^13.0.0"
+  },
+  "dockerfile": {
+    "litestream": true
   }
 }
