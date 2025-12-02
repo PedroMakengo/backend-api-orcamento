@@ -45,7 +45,7 @@ export async function sendVerificationEmail(
           
           <!-- Header -->
           <tr>
-            <td style="background-color: oklch(70.7% 0.165 254.624); padding: 30px; text-align: center;">
+            <td style="background-color: #51a2ff; padding: 30px; text-align: center;">
               <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-family: Arial, sans-serif;">
                 CRM Orçamento
               </h1>
@@ -67,8 +67,8 @@ export async function sendVerificationEmail(
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 30px 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <div style="display: inline-block; background-color: #f8f9fa; border: 2px dashed oklch(70.7% 0.165 254.624); border-radius: 8px; padding: 20px 40px;">
-                      <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: oklch(70.7% 0.165 254.624); font-family: 'Courier New', monospace;">
+                    <div style="display: inline-block; background-color: #f8f9fa; border: 2px dashed ##51a2ff; border-radius: 8px; padding: 20px 40px;">
+                      <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: ##51a2ff; font-family: 'Courier New', monospace;">
                         ${otp}
                       </span>
                     </div>
